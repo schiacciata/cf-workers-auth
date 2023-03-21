@@ -1,0 +1,29 @@
+{
+  "name": "@schiacciata/cf-workers-auth",
+  "version": "1.0.0",
+  "description": "👮 Set of utilities to help you manage your cloudflare worker authentication",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\"",
+    "build": "npx tsc src/UpdateReadme.ts",
+    "update:readme": "node src/UpdateReadme.js && git add . && git diff-index --cached --quiet HEAD || ( git commit -a -m \"📝 Update readme\" && git push)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schiacciata/cf-workers-auth.git"
+  },
+  "keywords": [
+    "cloudflare"
+  ],
+  "author": "PADO",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/schiacciata/cf-workers-auth/issues"
+  },
+  "homepage": "https://github.com/schiacciata/cf-workers-auth#readme",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^3.17.0",
+    "@types/node": "^18.11.18",
+    "typescript": "^4.8.4"
+  }
+}
