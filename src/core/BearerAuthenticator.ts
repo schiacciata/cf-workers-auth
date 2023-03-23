@@ -33,7 +33,11 @@ class BearerAuthenticator extends BaseAuthenticator implements IBearerClass {
     }
 
     const [, token] = authorization.split('Bearer ');
-    return await this.verifyJWT(token);
+    try {
+      return await this.verifyJWT(token);
+    } catch (error) {
+      return false;
+    }
   }
 
   private base64UrlEncode(data: string): string {
@@ -42,18 +46,17 @@ class BearerAuthenticator extends BaseAuthenticator implements IBearerClass {
   }
 
   private base64UrlDecode(base64Url: string): string {
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const paddingLength = 4 - (base64.length % 4);
-    const paddedBase64 = base64 + '==='.slice(0, paddingLength);
-    const decoded = atob(paddedBase64);
-    return decoded;
+    var str: string = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    while (str.length % 4) {
+      str += '=';
+    }
+    return atob(str);
   }
-  
 
   async login<UserType extends User>({ payload, users = this.users}: BearerLoginOpts<UserType>): Promise<string> {
     const { username, password } = payload;
 
-    const user = this.users.find(user => user.username === username && user.password === password);
+    const user = users.find(user => user.username === username && user.password === password);
     if (!user) {
       throw new Error('Invalid credentials');
     };
