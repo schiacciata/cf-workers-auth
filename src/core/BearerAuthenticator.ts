@@ -23,7 +23,15 @@ class BearerAuthenticator extends BaseAuthenticator implements IBearerClass {
       const data = new TextEncoder().encode(`${headerB64}.${payloadB64}`);
       const valid = await crypto.subtle.verify(this.algorithm, key, signature, data);
   
-      return valid;
+      if (!valid) return false;
+
+      const payload = JSON.parse(this.base64UrlDecode(payloadB64));
+      const expiration = payload.exp;
+
+      if (!expiration) return true;
+      
+      const currentTime = Math.floor(Date.now() / 1000);
+      return expiration > currentTime;
   }
 
   async isAuthenticated(opts: BearerAuthenticateOpts): Promise<boolean> {
