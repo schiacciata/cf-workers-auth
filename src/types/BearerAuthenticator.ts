@@ -39,4 +39,5 @@ export type {
     Algorithm,
     User,
     BearerLoginOpts,
+    Payload,
 }
