@@ -19,9 +19,16 @@ interface BearerAuthenticateOpts extends AuthenticateOpts {
     users?: User[];
 };
 
+type Payload = {
+    iss?: string;
+    sub?: string;
+    aud?: string;
+    exp?: number;
+};
+
 type BearerLoginOpts<P extends User> = LoginOpts & {
     users?: User[];
-    payload: P;
+    payload: P & Payload;
 };
 
 export type {
