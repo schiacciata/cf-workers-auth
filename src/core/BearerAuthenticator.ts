@@ -54,9 +54,9 @@ class BearerAuthenticator extends BaseAuthenticator implements IBearerClass {
   }
 
   async login<UserType extends User>({ payload, users = this.users}: BearerLoginOpts<UserType>): Promise<string> {
-    const { username, password } = payload;
+    const { password, ...tokenPayload } = payload;
 
-    const user = users.find(user => user.username === username && user.password === password);
+    const user = users.find(user => user.username === tokenPayload.username && user.password === password);
     if (!user) {
       throw new Error('Invalid credentials');
     };
@@ -65,8 +65,7 @@ class BearerAuthenticator extends BaseAuthenticator implements IBearerClass {
       alg: 'HS256',
       typ: 'JWT'
     };
-    const tokenPayload = { username };
-    
+
     const encodedHeader = this.base64UrlEncode(JSON.stringify(header));
     const encodedPayload = this.base64UrlEncode(JSON.stringify(tokenPayload));
     
